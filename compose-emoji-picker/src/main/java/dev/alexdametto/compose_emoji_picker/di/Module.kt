@@ -10,7 +10,7 @@ import dev.alexdametto.compose_emoji_picker.domain.repository.EmojiRepository
 
 @Module
 @InstallIn(ViewModelComponent::class)
-internal object ViewModelModule {
+object ViewModelModule {
     @ViewScoped
     @Provides
     fun provideEmojiRepository(

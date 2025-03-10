@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import dev.alexdametto.compose_emoji_picker.R
 
-internal enum class EmojiCategory(
+enum class EmojiCategory(
     val key: String,
     @StringRes val title: Int,
     @DrawableRes val icon: Int,
