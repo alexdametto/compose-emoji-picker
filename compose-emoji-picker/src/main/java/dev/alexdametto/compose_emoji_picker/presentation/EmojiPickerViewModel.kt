@@ -7,6 +7,7 @@ import dev.alexdametto.compose_emoji_picker.common.EmojiConstants
 import dev.alexdametto.compose_emoji_picker.domain.model.Emoji
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategory
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategoryTitle
+import dev.alexdametto.compose_emoji_picker.domain.model.EmojiItem
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiListItem
 import dev.alexdametto.compose_emoji_picker.domain.repository.EmojiRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class EmojiPickerViewModel @Inject constructor(
+internal class EmojiPickerViewModel @Inject constructor(
     private val emojiRepository: EmojiRepository,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
@@ -32,7 +33,6 @@ class EmojiPickerViewModel @Inject constructor(
                 emojiCategories = emojiRepository.getEmojisCategories()
             )
         }
-
         updateEmojis()
     }
 
@@ -76,7 +76,12 @@ class EmojiPickerViewModel @Inject constructor(
                 id = it.first.key,
                 category = it.first
             )
-            val emojiListItems: Array<EmojiListItem> = it.second.toTypedArray()
+            val emojiListItems: Array<EmojiListItem> = it.second.map { emoji ->
+                EmojiItem(
+                    id = emoji.id,
+                    emoji = emoji
+                )
+            }.toTypedArray()
 
             listOf(categoryTitleListItem, *emojiListItems)
         }.toList()

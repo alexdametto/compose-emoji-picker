@@ -11,14 +11,15 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class EmojiRepository @Inject constructor(
+internal class EmojiRepository @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     fun getEmojis(): List<Emoji> {
         val json = context.resources.openRawResource(R.raw.emojis)
             .bufferedReader().use { it.readText() }
 
-        val emojiList: List<Emoji> = Gson().fromJson(json, object: TypeToken<MutableList<Emoji>>() {})
+        val emojiList: List<Emoji> =
+            Gson().fromJson(json, object : TypeToken<MutableList<Emoji>>() {})
 
         return emojiList
     }
