@@ -23,7 +23,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -36,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -62,6 +62,7 @@ import dev.alexdametto.compose_emoji_picker.domain.model.EMOJI_GRINNING_FACE
 import dev.alexdametto.compose_emoji_picker.domain.model.Emoji
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategory
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategoryTitle
+import dev.alexdametto.compose_emoji_picker.domain.model.EmojiItem
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +70,7 @@ import kotlinx.coroutines.launch
 fun EmojiPicker(
     open: Boolean,
     onClose: () -> Unit,
+    onSelect: (emoji: Emoji) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val gridState = rememberLazyGridState()
@@ -85,18 +87,22 @@ fun EmojiPicker(
         )
     }
 
+    LaunchedEffect(open) {
+        // if picker is being closed, just clear the textr
+        if (!open) {
+            viewModel.onSearchTextChanged("")
+        }
+    }
+
     if (open) {
         ModalBottomSheet(
-            onDismissRequest = {
-                onClose()
-                viewModel.onSearchTextChanged("")
-            },
+            onDismissRequest = onClose,
             sheetState = sheetState,
             modifier = Modifier
                 .nestedScroll(rememberNestedScrollInteropConnection())
                 .systemBarsPadding()
         ) {
-            EmojiBottomSheetContent(
+            EmojiPickerContent(
                 state = viewModel.state.collectAsState().value,
                 gridState = gridState,
                 onCategoryTabClick = { categoryTitleIndex ->
@@ -107,24 +113,21 @@ fun EmojiPicker(
                         )
                     }
                 },
-                onSearchTextChange = viewModel::onSearchTextChanged
+                onSearchTextChange = viewModel::onSearchTextChanged,
+                onSelect = onSelect
             )
         }
     }
 }
 
 @Composable
-private fun EmojiBottomSheetContent(
+private fun EmojiPickerContent(
     state: EmojiPickerState,
     gridState: LazyGridState,
     onCategoryTabClick: (categoryTitleIndex: Int) -> Unit,
-    onSearchTextChange: (searchText: String) -> Unit
+    onSearchTextChange: (searchText: String) -> Unit,
+    onSelect: (emoji: Emoji) -> Unit,
 ) {
-    if (state.emojiListItems == null) {
-        CircularProgressIndicator()
-        return
-    }
-
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -142,17 +145,21 @@ private fun EmojiBottomSheetContent(
             EmojiConstants.categoryOrder.forEach { category ->
                 val categoryTitleIndex = state.categoryTitleIndexes.getOrDefault(category.key, -1)
                 val isEnabled = categoryTitleIndex != -1
-                val isSelected = isEnabled && state.categoryTitleIndexes.keys.last { categoryKey ->
-                    // calculate all distances from current visible item and category titles
-                    // < 0 if item is not visible (still to see)
-                    // >= 0 if item has already been viewed
-                    gridState.firstVisibleItemIndex - state.categoryTitleIndexes.getOrDefault(
-                        categoryKey,
-                        0
-                    ) >= 0
+                val isSelected = isEnabled && state.categoryTitleIndexes.keys
+                    .filter { categoryKey ->
+                        // filter out categories that are not in the result set
+                        state.categoryTitleIndexes.getOrDefault(categoryKey, -1) != -1
+                    }.last { categoryKey ->
+                        // calculate all distances from current visible item and category titles
+                        // < 0 if item is not visible (still to see)
+                        // >= 0 if item has already been viewed
+                        gridState.firstVisibleItemIndex - state.categoryTitleIndexes.getOrDefault(
+                            categoryKey,
+                            0
+                        ) >= 0
 
-                    // last item remaining after the filter is the selected on
-                } == category.key
+                        // last item remaining after the filter is the selected on
+                    } == category.key
 
                 CategoryTabButton(
                     category = category,
@@ -171,7 +178,7 @@ private fun EmojiBottomSheetContent(
             )
         )
 
-        if (state.emojiListItems.isEmpty()) {
+        if (state.emojiListItems!!.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -193,15 +200,16 @@ private fun EmojiBottomSheetContent(
                     .fillMaxSize()
             ) {
                 items(state.emojiListItems, span = {
-                    if (it is Emoji) {
+                    if (it is EmojiItem) {
                         GridItemSpan(1)
                     } else {
                         GridItemSpan(6)
                     }
                 }, key = { it.id }) {
-                    if (it is Emoji) {
+                    if (it is EmojiItem) {
                         EmojiButton(
-                            emoji = it
+                            emoji = it.emoji,
+                            onSelect = onSelect
                         )
                     } else if (it is EmojiCategoryTitle) {
                         CategoryTitle(
@@ -310,10 +318,13 @@ private fun CategoryTitle(
 
 @Composable
 private fun EmojiButton(
-    emoji: Emoji
+    emoji: Emoji,
+    onSelect: (emoji: Emoji) -> Unit
 ) {
     TextButton(
-        onClick = { }
+        onClick = {
+            onSelect(emoji)
+        }
     ) {
         Text(
             text = emoji.emoji,
@@ -330,14 +341,17 @@ private fun EmojiButton(
 @Composable
 private fun EmojiBottomSheetContentPreview() {
     Scaffold {
-        EmojiBottomSheetContent(
+        EmojiPickerContent(
             state = EmojiPickerState(
                 emojiListItems = listOf(
                     EmojiCategoryTitle(
                         category = EmojiCategory.OBJECTS,
                         id = EmojiCategory.OBJECTS.key
                     ),
-                    EMOJI_GRINNING_FACE
+                    EmojiItem(
+                        id = EMOJI_GRINNING_FACE.id,
+                        emoji = EMOJI_GRINNING_FACE
+                    )
                 ),
                 categoryTitleIndexes = mapOf(
                     EmojiCategory.RECENT.key to 0
@@ -345,7 +359,8 @@ private fun EmojiBottomSheetContentPreview() {
             ),
             gridState = LazyGridState(),
             onCategoryTabClick = { },
-            onSearchTextChange = { }
+            onSearchTextChange = { },
+            onSelect = { }
         )
     }
 }
@@ -355,14 +370,15 @@ private fun EmojiBottomSheetContentPreview() {
 @Composable
 private fun EmojiBottomSheetContentEmptyPreview() {
     Scaffold {
-        EmojiBottomSheetContent(
+        EmojiPickerContent(
             state = EmojiPickerState(
                 emojiListItems = listOf(),
                 categoryTitleIndexes = mapOf()
             ),
             gridState = LazyGridState(),
             onCategoryTabClick = { },
-            onSearchTextChange = { }
+            onSearchTextChange = { },
+            onSelect = { }
         )
     }
 }

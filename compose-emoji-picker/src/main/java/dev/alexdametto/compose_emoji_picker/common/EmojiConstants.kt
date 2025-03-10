@@ -2,7 +2,7 @@ package dev.alexdametto.compose_emoji_picker.common
 
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategory
 
-object EmojiConstants {
+internal object EmojiConstants {
     val categoryOrder = listOf(
         EmojiCategory.RECENT,
         EmojiCategory.SMILEYS_AND_PEOPLE,
