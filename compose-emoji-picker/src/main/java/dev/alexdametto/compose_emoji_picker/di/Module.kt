@@ -6,6 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewScoped
+import dev.alexdametto.compose_emoji_picker.data.SHARED_PREFERENCES_KEY
+import dev.alexdametto.compose_emoji_picker.data.SharedPreferencesHelper
 import dev.alexdametto.compose_emoji_picker.domain.repository.EmojiRepository
 
 @Module
@@ -18,4 +20,15 @@ internal object ViewModelModule {
     ): EmojiRepository = EmojiRepository(
         context = context
     )
+
+    @ViewScoped
+    @Provides
+    fun provideSharedPreferencesHelper(context: Context): SharedPreferencesHelper {
+        return SharedPreferencesHelper(
+            context.getSharedPreferences(
+                SHARED_PREFERENCES_KEY,
+                Context.MODE_PRIVATE
+            )
+        )
+    }
 }

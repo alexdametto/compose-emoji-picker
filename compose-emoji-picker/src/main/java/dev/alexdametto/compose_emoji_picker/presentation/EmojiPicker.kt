@@ -83,14 +83,22 @@ fun EmojiPicker(
             emojiRepository = ViewModelModule.provideEmojiRepository(
                 context = context
             ),
+            sharedPreferencesHelper = ViewModelModule.provideSharedPreferencesHelper(
+                context = context
+            ),
             context = context
         )
     }
 
     LaunchedEffect(open) {
-        // if picker is being closed, just clear the textr
         if (!open) {
+            // if picker is being closed,
+
+            // just clear the search text
             viewModel.onSearchTextChanged("")
+
+            // scroll at beginning
+            gridState.scrollToItem(0)
         }
     }
 
@@ -114,7 +122,8 @@ fun EmojiPicker(
                     }
                 },
                 onSearchTextChange = viewModel::onSearchTextChanged,
-                onSelect = onSelect
+                onSelect = onSelect,
+                onAddToRecent = viewModel::onAddToRecent
             )
         }
     }
@@ -127,6 +136,7 @@ private fun EmojiPickerContent(
     onCategoryTabClick: (categoryTitleIndex: Int) -> Unit,
     onSearchTextChange: (searchText: String) -> Unit,
     onSelect: (emoji: Emoji) -> Unit,
+    onAddToRecent: (emoji: Emoji) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -209,7 +219,8 @@ private fun EmojiPickerContent(
                     if (it is EmojiItem) {
                         EmojiButton(
                             emoji = it.emoji,
-                            onSelect = onSelect
+                            onSelect = onSelect,
+                            onAddToRecent = onAddToRecent
                         )
                     } else if (it is EmojiCategoryTitle) {
                         CategoryTitle(
@@ -319,10 +330,15 @@ private fun CategoryTitle(
 @Composable
 private fun EmojiButton(
     emoji: Emoji,
-    onSelect: (emoji: Emoji) -> Unit
+    onSelect: (emoji: Emoji) -> Unit,
+    onAddToRecent: (emoji: Emoji) -> Unit,
 ) {
     TextButton(
         onClick = {
+            // add to recent
+            onAddToRecent(emoji)
+
+            // select emoji
             onSelect(emoji)
         }
     ) {
@@ -360,7 +376,8 @@ private fun EmojiBottomSheetContentPreview() {
             gridState = LazyGridState(),
             onCategoryTabClick = { },
             onSearchTextChange = { },
-            onSelect = { }
+            onSelect = { },
+            onAddToRecent = { }
         )
     }
 }
@@ -378,7 +395,8 @@ private fun EmojiBottomSheetContentEmptyPreview() {
             gridState = LazyGridState(),
             onCategoryTabClick = { },
             onSearchTextChange = { },
-            onSelect = { }
+            onSelect = { },
+            onAddToRecent = { }
         )
     }
 }

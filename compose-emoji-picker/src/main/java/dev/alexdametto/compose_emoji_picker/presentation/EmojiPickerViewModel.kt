@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.alexdametto.compose_emoji_picker.common.EmojiConstants
+import dev.alexdametto.compose_emoji_picker.data.SharedPreferencesHelper
 import dev.alexdametto.compose_emoji_picker.domain.model.Emoji
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategory
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategoryTitle
@@ -17,6 +18,7 @@ import javax.inject.Inject
 
 internal class EmojiPickerViewModel @Inject constructor(
     private val emojiRepository: EmojiRepository,
+    private val sharedPreferencesHelper: SharedPreferencesHelper,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
     private val _state = MutableStateFlow(EmojiPickerState())
@@ -46,10 +48,25 @@ internal class EmojiPickerViewModel @Inject constructor(
             return
         }
 
-        // TODO: add recent emojis to emoji list
+        val allEmojis = ArrayList(emojis)
+
+        // add recent emojis to emoji list
+        val recentEmojis = sharedPreferencesHelper.getRecentEmojis()
+        recentEmojis.forEach { recentEmoji ->
+            allEmojis.add(Emoji(
+                    id = "recent_${recentEmoji.id}",
+                    emoji = recentEmoji.emoji,
+                    name = recentEmoji.name,
+                    slug = recentEmoji.slug,
+
+                    // this emoji is part of RECENT category
+                    category = EmojiCategory.RECENT.key
+                )
+            )
+        }
 
         // create a filtered emoji map by category
-        val emojiByCategory: Map<EmojiCategory, List<Emoji>> = emojis.filter {
+        val emojiByCategory: Map<EmojiCategory, List<Emoji>> = allEmojis.filter {
             val categoryTitle = context.getString(EmojiCategory.findByKey(it.category)!!.title)
 
             // search in icon name or in category name
@@ -112,5 +129,9 @@ internal class EmojiPickerViewModel @Inject constructor(
 
         // recompute the emojis
         updateEmojis()
+    }
+
+    fun onAddToRecent(emoji: Emoji) {
+        sharedPreferencesHelper.addRecentEmoji(emoji)
     }
 }

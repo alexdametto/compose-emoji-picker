@@ -16,4 +16,6 @@ internal object EmojiConstants {
     )
 
     const val EMOJI_PER_ROW = 6
+
+    const val RECENT_EMOJI_LIMIT = 30
 }
