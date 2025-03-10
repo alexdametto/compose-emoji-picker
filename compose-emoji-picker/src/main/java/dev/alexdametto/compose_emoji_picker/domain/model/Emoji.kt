@@ -2,7 +2,7 @@ package dev.alexdametto.compose_emoji_picker.domain.model
 
 import com.google.gson.annotations.SerializedName
 
-internal data class Emoji(
+data class Emoji(
     @SerializedName("key") override val id: String,
     @SerializedName("emoji") val emoji: String,
     @SerializedName("name") val name: String,
@@ -10,7 +10,7 @@ internal data class Emoji(
     @SerializedName("category") val category: String
 ): EmojiListItem(Type.EMOJI)
 
-internal val EMOJI_GRINNING_FACE = Emoji(
+val EMOJI_GRINNING_FACE = Emoji(
     id = "grinning_face",
     emoji = "😀",
     name = "grinning face",

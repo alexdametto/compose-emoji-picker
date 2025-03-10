@@ -70,9 +70,7 @@ fun EmojiPicker(
     open: Boolean,
     onClose: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(
-        // skipPartiallyExpanded = false
-    )
+    val sheetState = rememberModalBottomSheetState()
     val gridState = rememberLazyGridState()
     // Remember a CoroutineScope to be able to launch
     val coroutineScope = rememberCoroutineScope()
@@ -130,7 +128,6 @@ private fun EmojiBottomSheetContent(
     Column(
         modifier = Modifier
             .padding(10.dp)
-            // .height(300.dp)
             .fillMaxSize()
     ) {
         EmojiSearchBar(

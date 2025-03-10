@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-internal class EmojiPickerViewModel @Inject constructor(
+class EmojiPickerViewModel @Inject constructor(
     private val emojiRepository: EmojiRepository,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {

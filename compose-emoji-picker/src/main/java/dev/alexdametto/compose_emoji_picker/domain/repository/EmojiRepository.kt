@@ -11,7 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class EmojiRepository @Inject constructor(
+class EmojiRepository @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     fun getEmojis(): List<Emoji> {
