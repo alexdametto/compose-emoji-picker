@@ -20,5 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "compose-emojis"
-include(":app")
+include(":sample-app")
 include(":compose-emojis")

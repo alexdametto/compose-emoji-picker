@@ -1,20 +1,20 @@
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "dev.alexdametto.compose_emojis"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
+        applicationId = "dev.alexdametto.compose_emojis"
         minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -45,25 +45,25 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.runtime.android)
-    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Tooling
-    implementation(libs.androidx.ui.tooling.preview.android)
-    debugImplementation(libs.androidx.ui.tooling)
+    // material 3
+    implementation(libs.androidx.material3)
 
-    // Lifecycle
-    implementation(libs.androidx.lifecycle.livedata.ktx)
+    // Android Studio Preview support
+    implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.ui.tooling)
 
-    // Networking
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.gson)
+    // import our library for local development
+    implementation(project(":compose-emojis"))
 }
