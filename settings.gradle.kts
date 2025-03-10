@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "compose-emojis"
+rootProject.name = "compose-emoji-picker"
 include(":sample-app")
-include(":compose-emojis")
+include(":compose-emoji-picker")
