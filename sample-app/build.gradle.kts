@@ -48,19 +48,13 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.foundation.layout.android)
-    implementation(libs.androidx.foundation.layout.android)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     // material 3
+    implementation(libs.material)
     implementation(libs.androidx.material3)
 
-    // Android Studio Preview support
+    // Tooling (previews, ...)
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.ui.tooling)
 

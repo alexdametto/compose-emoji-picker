@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "dev.alexdametto.compose_emoji_picker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -47,14 +47,13 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.runtime.android)
-    implementation(libs.androidx.material3.android)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
-    // Tooling
+    // Material
+    implementation(libs.material)
+    implementation(libs.androidx.material3.android)
+
+    // Tooling (previews, ...)
     implementation(libs.androidx.ui.tooling.preview.android)
     debugImplementation(libs.androidx.ui.tooling)
 
@@ -64,6 +63,6 @@ dependencies {
     // Networking
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
+    // implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.gson)
 }
