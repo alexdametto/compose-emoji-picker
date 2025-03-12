@@ -15,8 +15,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,8 +44,12 @@ class SampleActivity : ComponentActivity() {
 @Preview
 @Composable
 fun SampleActivityContent() {
-    var openEmojiPicker by rememberSaveable { mutableStateOf(false) }
-    var selectedEmoji by rememberSaveable { mutableStateOf("😀") }
+    val openEmojiPicker: MutableState<Boolean> = remember {
+        mutableStateOf(false)
+    }
+    val selectedEmoji: MutableState<String> = remember {
+        mutableStateOf("")
+    }
 
     Scaffold(
         topBar = {
@@ -69,27 +75,27 @@ fun SampleActivityContent() {
                 .fillMaxSize(),
         ) {
             Text(
-                text = selectedEmoji,
+                text = selectedEmoji.value,
                 style = TextStyle(
                     fontSize = 50.sp
                 )
             )
 
             Button(
-                onClick = { openEmojiPicker = !openEmojiPicker },
+                onClick = { openEmojiPicker.value = !openEmojiPicker.value },
             ) {
                 Text(text = "Change emoji")
             }
         }
 
         EmojiPicker(
-            open = openEmojiPicker,
+            open = openEmojiPicker.value,
             onClose = {
-                openEmojiPicker = false
+                openEmojiPicker.value = false
             },
             onEmojiSelected = {
-                selectedEmoji = it.emoji
-                openEmojiPicker = false
+                selectedEmoji.value = it.emoji
+                openEmojiPicker.value = false
             }
         )
     }

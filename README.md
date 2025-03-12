@@ -48,17 +48,21 @@ dependencies {
 You can integrate the Emoji Picker into your composable like this:
 
 ```kotlin
-var openEmojiPicker by rememberSaveable { mutableStateOf(false) }
-var selectedEmoji by rememberSaveable { mutableStateOf("😀") }
+val openEmojiPicker: MutableState<Boolean> = remember {
+    mutableStateOf(false)
+}
+val selectedEmoji: MutableState<String> = remember {
+    mutableStateOf("")
+}
 
 EmojiPicker(
-    open = openEmojiPicker,
+    open = openEmojiPicker.value,
     onClose = {
-        openEmojiPicker = false
+        openEmojiPicker.value = false
     },
     onEmojiSelected = {
-        selectedEmoji = it.emoji
-        openEmojiPicker = false
+        selectedEmoji.value = it.emoji
+        openEmojiPicker.value = false
     }
 )
 ```
