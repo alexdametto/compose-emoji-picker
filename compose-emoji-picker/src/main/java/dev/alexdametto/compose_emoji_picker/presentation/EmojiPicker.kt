@@ -1,6 +1,7 @@
 package dev.alexdametto.compose_emoji_picker.presentation
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -199,7 +200,7 @@ private fun EmojiPickerContent(
                     style = TextStyle(
                         fontSize = 16.sp
                     ),
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         } else {
@@ -246,7 +247,10 @@ private fun EmojiSearchBar(
         modifier = Modifier
             .height(height)
             .fillMaxWidth()
-            .background(color = colorResource(R.color.search_bar_bg_color), shape = cornerShape),
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = cornerShape
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BasicTextField(
@@ -266,6 +270,7 @@ private fun EmojiSearchBar(
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Box(
                             modifier = Modifier.fillMaxWidth(),
@@ -277,6 +282,7 @@ private fun EmojiSearchBar(
                                         modifier = Modifier
                                             .fillMaxWidth(),
                                         text = stringResource(R.string.search),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                                 innerTextField()
@@ -309,7 +315,7 @@ private fun RowScope.CategoryTabButton(
         Icon(
             imageVector = ImageVector.vectorResource(category.icon),
             contentDescription = stringResource(category.title),
-            tint = if (selected) MaterialTheme.colorScheme.primary else LocalContentColor.current
+            tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -323,7 +329,7 @@ private fun CategoryTitle(
         style = TextStyle(
             fontSize = 16.sp
         ),
-        color = Color.Gray,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 }
 
@@ -353,32 +359,36 @@ private fun EmojiButton(
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Preview
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Full Preview", showSystemUi = true)
 @Composable
 private fun EmojiBottomSheetContentPreview() {
-    Scaffold {
-        EmojiPickerContent(
-            state = EmojiPickerState(
-                emojiListItems = listOf(
-                    EmojiCategoryTitle(
-                        category = EmojiCategory.OBJECTS,
-                        id = EmojiCategory.OBJECTS.key
+    PlaygroundTheme {
+        Scaffold {
+            EmojiPickerContent(
+                state = EmojiPickerState(
+                    emojiListItems = listOf(
+                        EmojiCategoryTitle(
+                            category = EmojiCategory.OBJECTS,
+                            id = EmojiCategory.OBJECTS.key
+                        ),
+                        EmojiItem(
+                            id = EMOJI_GRINNING_FACE.id,
+                            emoji = EMOJI_GRINNING_FACE
+                        )
                     ),
-                    EmojiItem(
-                        id = EMOJI_GRINNING_FACE.id,
-                        emoji = EMOJI_GRINNING_FACE
+                    categoryTitleIndexes = mapOf(
+                        EmojiCategory.RECENT.key to 0
                     )
                 ),
-                categoryTitleIndexes = mapOf(
-                    EmojiCategory.RECENT.key to 0
-                )
-            ),
-            gridState = LazyGridState(),
-            onCategoryTabClick = { },
-            onSearchTextChange = { },
-            onEmojiSelected = { },
-            onAddToRecent = { }
-        )
+                gridState = LazyGridState(),
+                onCategoryTabClick = { },
+                onSearchTextChange = { },
+                onEmojiSelected = { },
+                onAddToRecent = { }
+            )
+        }
     }
 }
 

@@ -52,7 +52,7 @@ val openEmojiPicker: MutableState<Boolean> = remember {
     mutableStateOf(false)
 }
 val selectedEmoji: MutableState<String> = remember {
-    mutableStateOf("")
+    mutableStateOf("😀")
 }
 
 EmojiPicker(
@@ -68,6 +68,18 @@ EmojiPicker(
 ```
 
 For a more complete example, check out the [sample project](sample-app/src/main/java/dev/alexdametto/compose_emoji_picker/SampleActivity.kt).
+
+## ✨ Theming
+
+This library fully supports both **Light** and **Dark** modes, automatically adapting to the colors defined in your **Material 3** theme. This ensures that the emoji picker seamlessly matches colors specified in your app's theme. Whether the user is in light or dark mode, the picker will adjust dynamically to provide a consistent and polished experience, aligning perfectly with the overall design of your app.
+
+Below are examples of the emoji picker in both Light and Dark modes:
+
+<p float="left">
+    <img src="./images/day_mode.png" alt="day mode" width="200"/>
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <img src="./images/night_mode.png" alt="night mode" width="200"/>
+</p>
 
 ## 🔗 Contribute
 
