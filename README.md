@@ -1,6 +1,6 @@
 # 😀 Compose Emoji Picker
 
-This library provides an **Emoji Picker** that is easy to integrate into any Android project built with Jetpack Compose. It allows users to quickly and intuitively select and insert emojis into their applications, without the need to manually implement a complex graphical interface.
+This library provides an **Emoji Picker** that is easy to integrate into any Android project built with Jetpack Compose. It allows users to quickly and intuitively select and insert emojis into the application.
 
 ## Features
 
