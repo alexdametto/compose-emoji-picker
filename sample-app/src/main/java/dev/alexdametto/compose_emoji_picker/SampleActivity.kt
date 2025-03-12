@@ -35,7 +35,9 @@ class SampleActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            SampleActivityContent()
+            SampleActivityTheme {
+                SampleActivityContent()
+            }
         }
     }
 }
@@ -48,7 +50,7 @@ fun SampleActivityContent() {
         mutableStateOf(false)
     }
     val selectedEmoji: MutableState<String> = remember {
-        mutableStateOf("")
+        mutableStateOf("😀")
     }
 
     Scaffold(
