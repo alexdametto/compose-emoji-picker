@@ -70,7 +70,7 @@ import kotlinx.coroutines.launch
 fun EmojiPicker(
     open: Boolean,
     onClose: () -> Unit,
-    onSelect: (emoji: Emoji) -> Unit,
+    onEmojiSelected: (emoji: Emoji) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val gridState = rememberLazyGridState()
@@ -122,7 +122,7 @@ fun EmojiPicker(
                     }
                 },
                 onSearchTextChange = viewModel::onSearchTextChanged,
-                onSelect = onSelect,
+                onEmojiSelected = onEmojiSelected,
                 onAddToRecent = viewModel::onAddToRecent
             )
         }
@@ -135,7 +135,7 @@ private fun EmojiPickerContent(
     gridState: LazyGridState,
     onCategoryTabClick: (categoryTitleIndex: Int) -> Unit,
     onSearchTextChange: (searchText: String) -> Unit,
-    onSelect: (emoji: Emoji) -> Unit,
+    onEmojiSelected: (emoji: Emoji) -> Unit,
     onAddToRecent: (emoji: Emoji) -> Unit,
 ) {
     Column(
@@ -219,7 +219,7 @@ private fun EmojiPickerContent(
                     if (it is EmojiItem) {
                         EmojiButton(
                             emoji = it.emoji,
-                            onSelect = onSelect,
+                            onEmojiSelected = onEmojiSelected,
                             onAddToRecent = onAddToRecent
                         )
                     } else if (it is EmojiCategoryTitle) {
@@ -330,7 +330,7 @@ private fun CategoryTitle(
 @Composable
 private fun EmojiButton(
     emoji: Emoji,
-    onSelect: (emoji: Emoji) -> Unit,
+    onEmojiSelected: (emoji: Emoji) -> Unit,
     onAddToRecent: (emoji: Emoji) -> Unit,
 ) {
     TextButton(
@@ -339,7 +339,7 @@ private fun EmojiButton(
             onAddToRecent(emoji)
 
             // select emoji
-            onSelect(emoji)
+            onEmojiSelected(emoji)
         }
     ) {
         Text(
@@ -376,7 +376,7 @@ private fun EmojiBottomSheetContentPreview() {
             gridState = LazyGridState(),
             onCategoryTabClick = { },
             onSearchTextChange = { },
-            onSelect = { },
+            onEmojiSelected = { },
             onAddToRecent = { }
         )
     }
@@ -395,7 +395,7 @@ private fun EmojiBottomSheetContentEmptyPreview() {
             gridState = LazyGridState(),
             onCategoryTabClick = { },
             onSearchTextChange = { },
-            onSelect = { },
+            onEmojiSelected = { },
             onAddToRecent = { }
         )
     }

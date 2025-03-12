@@ -4,6 +4,8 @@ plugins {
 
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+
+    `maven-publish`
 }
 
 android {
@@ -65,4 +67,18 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     // implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.gson)
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "dev.alexdametto"
+            artifactId = "compose-emoji-picker"
+            version = "1.0.0-beta"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
