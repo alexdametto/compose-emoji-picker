@@ -72,7 +72,7 @@ dependencies {
 publishing {
     publications {
         register<MavenPublication>("release") {
-            groupId = "dev.alexdametto"
+            groupId = "com.github.alexdametto"
             artifactId = "compose-emoji-picker"
             version = "1.0.0-beta"
 
