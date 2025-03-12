@@ -42,7 +42,7 @@ class SampleActivity : ComponentActivity() {
 @Preview
 @Composable
 fun SampleActivityContent() {
-    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
+    var openEmojiPicker by rememberSaveable { mutableStateOf(false) }
     var selectedEmoji by rememberSaveable { mutableStateOf("😀") }
 
     Scaffold(
@@ -76,20 +76,20 @@ fun SampleActivityContent() {
             )
 
             Button(
-                onClick = { openBottomSheet = !openBottomSheet },
+                onClick = { openEmojiPicker = !openEmojiPicker },
             ) {
                 Text(text = "Change emoji")
             }
         }
 
         EmojiPicker(
-            open = openBottomSheet,
+            open = openEmojiPicker,
             onClose = {
-                openBottomSheet = false
+                openEmojiPicker = false
             },
-            onSelect = {
+            onEmojiSelected = {
                 selectedEmoji = it.emoji
-                openBottomSheet = false
+                openEmojiPicker = false
             }
         )
     }
