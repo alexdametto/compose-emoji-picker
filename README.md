@@ -39,7 +39,7 @@ To add the library to your project, include the following dependency in your `bu
 
 ```gradle
 dependencies {
-    implementation("dev.alexdametto:compose-emoji-picker:<version>")
+    implementation("com.github.alexdametto:compose-emoji-picker:<version>")
 }
 ```
 
