@@ -38,6 +38,9 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -149,6 +152,26 @@ private fun EmojiPickerContent(
             onValueChange = onSearchTextChange
         )
 
+        // Calculate selected category only when firstVisibleItemIndex or categoryTitleIndexes actually change
+        val selectedCategoryKey by remember {
+            derivedStateOf {
+                state.categoryTitleIndexes.keys
+                .filter { categoryKey ->
+                    // filter out categories that are not in the result set
+                    state.categoryTitleIndexes.getOrDefault(categoryKey, -1) != -1
+                }
+                .last { categoryKey ->
+                    // calculate all distances from current visible item and category titles
+                    // < 0 if item is not visible (still to see)
+                    // >= 0 if item has already been viewed
+                    gridState.firstVisibleItemIndex - state.categoryTitleIndexes.getOrDefault(
+                        categoryKey,
+                        0
+                    ) >= 0
+                }
+            }
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -156,21 +179,7 @@ private fun EmojiPickerContent(
             EmojiConstants.categoryOrder.forEach { category ->
                 val categoryTitleIndex = state.categoryTitleIndexes.getOrDefault(category.key, -1)
                 val isEnabled = categoryTitleIndex != -1
-                val isSelected = isEnabled && state.categoryTitleIndexes.keys
-                    .filter { categoryKey ->
-                        // filter out categories that are not in the result set
-                        state.categoryTitleIndexes.getOrDefault(categoryKey, -1) != -1
-                    }.last { categoryKey ->
-                        // calculate all distances from current visible item and category titles
-                        // < 0 if item is not visible (still to see)
-                        // >= 0 if item has already been viewed
-                        gridState.firstVisibleItemIndex - state.categoryTitleIndexes.getOrDefault(
-                            categoryKey,
-                            0
-                        ) >= 0
-
-                        // last item remaining after the filter is the selected on
-                    } == category.key
+                val isSelected = isEnabled && selectedCategoryKey == category.key
 
                 CategoryTabButton(
                     category = category,
