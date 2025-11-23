@@ -225,7 +225,12 @@ private fun EmojiPickerContent(
                     } else {
                         GridItemSpan(6)
                     }
-                }, key = { it.id }) {
+                }, key = { it.id }, contentType = { item ->
+                    when (item) {
+                        is EmojiItem -> "EmojiButton"
+                        is EmojiCategoryTitle -> "CategoryTitle"
+                    }
+                }) {
                     if (it is EmojiItem) {
                         EmojiButton(
                             emoji = it.emoji,
