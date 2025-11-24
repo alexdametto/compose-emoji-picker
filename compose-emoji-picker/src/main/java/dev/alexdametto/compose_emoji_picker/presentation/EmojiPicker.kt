@@ -158,7 +158,7 @@ private fun EmojiPickerContent(
                 state.categoryTitleIndexes.keys
                 .filter { categoryKey ->
                     // filter out categories that are not in the result set
-                    state.categoryTitleIndexes.getOrDefault(categoryKey, -1) != -1
+                    state.categoryTitleIndexes.containsKey(categoryKey)
                 }
                 .last { categoryKey ->
                     // calculate all distances from current visible item and category titles
