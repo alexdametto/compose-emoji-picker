@@ -2,9 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
 
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
-
     `maven-publish`
 }
 
@@ -62,10 +59,7 @@ dependencies {
     // Lifecycle
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
-    // Networking
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    // implementation(libs.androidx.hilt.navigation.compose)
+    // Other
     implementation(libs.gson)
 }
 
