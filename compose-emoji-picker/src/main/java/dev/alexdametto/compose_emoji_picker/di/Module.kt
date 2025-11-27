@@ -15,14 +15,6 @@ import dev.alexdametto.compose_emoji_picker.domain.repository.EmojiRepository
 internal object ViewModelModule {
     @ViewScoped
     @Provides
-    fun provideEmojiRepository(
-        context: Context
-    ): EmojiRepository = EmojiRepository(
-        context = context
-    )
-
-    @ViewScoped
-    @Provides
     fun provideSharedPreferencesHelper(context: Context): SharedPreferencesHelper {
         return SharedPreferencesHelper(
             context.getSharedPreferences(
@@ -31,4 +23,14 @@ internal object ViewModelModule {
             )
         )
     }
+
+    @ViewScoped
+    @Provides
+    fun provideEmojiRepository(
+        context: Context,
+        sharedPreferencesHelper: SharedPreferencesHelper
+    ): EmojiRepository = EmojiRepository(
+        context = context,
+        sharedPreferencesHelper = sharedPreferencesHelper
+    )
 }

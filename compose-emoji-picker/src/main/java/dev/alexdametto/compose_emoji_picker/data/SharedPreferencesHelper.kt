@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dev.alexdametto.compose_emoji_picker.common.EmojiConstants
 import dev.alexdametto.compose_emoji_picker.domain.model.Emoji
-import dev.alexdametto.compose_emoji_picker.domain.model.EmojiItem
 
 private const val RECENT_EMOJIS_KEY = "emoji_picker_recent_emojis"
 internal const val SHARED_PREFERENCES_KEY = "emoji_picker_shared_preferences"
