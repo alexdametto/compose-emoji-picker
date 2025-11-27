@@ -1,7 +1,6 @@
 [versions]
 agp = "8.7.2"
 gson = "2.10.1"
-hiltAndroid = "2.51.1"
 kotlin = "1.9.24"
 coreKtx = "1.15.0"
 appcompat = "1.7.0"
@@ -20,8 +19,6 @@ androidx-material3 = { module = "androidx.compose.material3:material3", version.
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "uiToolingPreviewAndroid" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }

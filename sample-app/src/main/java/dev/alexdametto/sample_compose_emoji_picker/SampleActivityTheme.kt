@@ -1,4 +1,4 @@
-package dev.alexdametto.compose_emoji_picker
+package dev.alexdametto.sample_compose_emoji_picker
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

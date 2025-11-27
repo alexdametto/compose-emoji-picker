@@ -6,14 +6,19 @@ import dev.alexdametto.compose_emoji_picker.domain.model.Emoji
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategoryTitle
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiItem
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiListItem
-import dev.alexdametto.compose_emoji_picker.domain.repository.EmojiRepository
+import dev.alexdametto.compose_emoji_picker.domain.use_case.AddToRecentEmojisUseCase
+import dev.alexdametto.compose_emoji_picker.domain.use_case.GetEmojiCategoriesUseCase
+import dev.alexdametto.compose_emoji_picker.domain.use_case.GetEmojiCategoryByKeyUseCase
+import dev.alexdametto.compose_emoji_picker.domain.use_case.GetEmojisUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
-internal class EmojiPickerViewModel @Inject constructor(
-    private val emojiRepository: EmojiRepository
+internal class EmojiPickerViewModel(
+    private val getEmojisUseCase: GetEmojisUseCase,
+    private val getEmojiCategoriesUseCase: GetEmojiCategoriesUseCase,
+    private val getEmojiCategoryByKeyUseCase: GetEmojiCategoryByKeyUseCase,
+    private val addToRecentEmojisUseCase: AddToRecentEmojisUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(EmojiPickerState())
     val state = _state.asStateFlow()
@@ -25,17 +30,25 @@ internal class EmojiPickerViewModel @Inject constructor(
     private fun loadEmojisAndCategories() {
         _state.update {
             it.copy(
-                emojiCategories = emojiRepository.getEmojiCategories()
+                emojiCategories = getEmojiCategoriesUseCase()
             )
         }
         updateEmojis()
     }
 
     private fun updateEmojis() {
-        val query = state.value.query
-        val emojis = emojiRepository.getEmojis(query)
+        val searchText = state.value.searchText
+        val emojis = getEmojisUseCase(searchText)
 
-        val emojiListItems: List<EmojiListItem> = emojis.flatMap {
+        val emojiListItems: List<EmojiListItem> = emojis.groupBy {
+            // group by category
+            it.category
+        }.mapKeys {
+            // get EmojiCategory object from key
+            getEmojiCategoryByKeyUseCase(it.key)!!
+        }.toList().sortedBy { entry ->
+            EmojiConstants.categoryOrder.find { it.key == entry.first.key }
+        }.flatMap {
             val category = it.first
             val categoryEmojis = it.second
 
@@ -51,7 +64,7 @@ internal class EmojiPickerViewModel @Inject constructor(
             }.toTypedArray()
 
             listOf(categoryTitleListItem, *emojiListItems)
-        }.toList()
+        }
 
         // populate indexes map
         val categoryTitleIndexes: MutableMap<String, Int> = mutableMapOf()
@@ -73,7 +86,7 @@ internal class EmojiPickerViewModel @Inject constructor(
     fun onSearchTextChanged(searchText: String) {
         _state.update {
             it.copy(
-                query = searchText
+                searchText = searchText
             )
         }
 
@@ -82,6 +95,6 @@ internal class EmojiPickerViewModel @Inject constructor(
     }
 
     fun onAddToRecent(emoji: Emoji) {
-        emojiRepository.addRecentEmoji(emoji)
+        addToRecentEmojisUseCase(emoji)
     }
 }

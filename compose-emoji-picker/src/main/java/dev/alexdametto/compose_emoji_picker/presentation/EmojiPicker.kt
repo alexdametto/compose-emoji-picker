@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alexdametto.compose_emoji_picker.R
 import dev.alexdametto.compose_emoji_picker.common.EmojiConstants
-import dev.alexdametto.compose_emoji_picker.di.ViewModelModule
+import dev.alexdametto.compose_emoji_picker.di.RepositoryModule
 import dev.alexdametto.compose_emoji_picker.domain.model.EMOJI_GRINNING_FACE
 import dev.alexdametto.compose_emoji_picker.domain.model.Emoji
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategory
@@ -79,16 +79,9 @@ fun EmojiPicker(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    val viewModel: EmojiPickerViewModel by lazy {
-        EmojiPickerViewModel(
-            emojiRepository = ViewModelModule.provideEmojiRepository(
-                context = context,
-                ViewModelModule.provideSharedPreferencesHelper(
-                    context = context
-                )
-            )
-        )
-    }
+    val viewModel: EmojiPickerViewModel = RepositoryModule.provideEmojiPickerViewModel(
+        context = context
+    )
 
     LaunchedEffect(open) {
         if (!open) {
@@ -144,7 +137,7 @@ private fun EmojiPickerContent(
             .fillMaxSize()
     ) {
         EmojiSearchBar(
-            value = state.query,
+            value = state.searchText,
             onValueChange = onSearchTextChange
         )
 

@@ -9,5 +9,5 @@ internal data class EmojiPickerState(
 
     val categoryTitleIndexes: Map<String, Int> = emptyMap(),
 
-    val query: String = ""
+    val searchText: String = ""
 )
