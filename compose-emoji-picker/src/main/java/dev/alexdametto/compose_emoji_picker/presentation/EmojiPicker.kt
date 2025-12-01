@@ -59,7 +59,6 @@ import androidx.compose.ui.unit.sp
 import dev.alexdametto.compose_emoji_picker.R
 import dev.alexdametto.compose_emoji_picker.common.EmojiConstants
 import dev.alexdametto.compose_emoji_picker.di.RepositoryModule
-import dev.alexdametto.compose_emoji_picker.domain.model.EMOJI_GRINNING_FACE
 import dev.alexdametto.compose_emoji_picker.domain.model.Emoji
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategory
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategoryTitle
@@ -367,6 +366,14 @@ private fun EmojiButton(
 @Preview(name = "Full Preview", showSystemUi = true)
 @Composable
 private fun EmojiBottomSheetContentPreview() {
+    val randomEmoji = Emoji(
+        id = "grinning_face",
+        emoji = "😀",
+        name = "grinning face",
+        slug = "grinning_face",
+        category = EmojiCategory.SMILEYS_AND_PEOPLE.key
+    )
+
     PlaygroundTheme {
         Scaffold {
             EmojiPickerContent(
@@ -377,8 +384,8 @@ private fun EmojiBottomSheetContentPreview() {
                             id = EmojiCategory.OBJECTS.key
                         ),
                         EmojiItem(
-                            id = EMOJI_GRINNING_FACE.id,
-                            emoji = EMOJI_GRINNING_FACE
+                            id = randomEmoji.id,
+                            emoji = randomEmoji
                         )
                     ),
                     categoryTitleIndexes = mapOf(
