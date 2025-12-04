@@ -22,20 +22,22 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 internal class EmojiPickerViewModelTest {
     @MockK
-    lateinit var getEmojisUseCase: GetEmojisUseCase
+    private lateinit var getEmojisUseCase: GetEmojisUseCase
     @MockK
-    lateinit var getEmojiCategoriesUseCase: GetEmojiCategoriesUseCase
+    private lateinit var getEmojiCategoriesUseCase: GetEmojiCategoriesUseCase
     @MockK
-    lateinit var getEmojiCategoryByKeyUseCase: GetEmojiCategoryByKeyUseCase
+    private lateinit var getEmojiCategoryByKeyUseCase: GetEmojiCategoryByKeyUseCase
     @MockK
-    lateinit var addToRecentEmojisUseCase: AddToRecentEmojisUseCase
+    private lateinit var addToRecentEmojisUseCase: AddToRecentEmojisUseCase
 
     private lateinit var viewModel: EmojiPickerViewModel
 

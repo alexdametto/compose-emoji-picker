@@ -1,6 +1,5 @@
 package dev.alexdametto.compose_emoji_picker.domain.use_case
 
-import dev.alexdametto.compose_emoji_picker.domain.model.EMOJI_GRINNING_FACE
 import dev.alexdametto.compose_emoji_picker.domain.repository.EmojiRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -19,7 +18,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 internal class GetEmojisUseCaseTest {
     @MockK
-    lateinit var repository: EmojiRepository
+    private lateinit var repository: EmojiRepository
 
     private lateinit var getEmojisUseCase: GetEmojisUseCase
 

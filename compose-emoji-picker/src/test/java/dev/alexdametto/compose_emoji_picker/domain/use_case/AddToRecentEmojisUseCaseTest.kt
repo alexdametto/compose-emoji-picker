@@ -19,7 +19,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 internal class AddToRecentEmojisUseCaseTest {
     @MockK
-    lateinit var repository: EmojiRepository
+    private lateinit var repository: EmojiRepository
 
     private lateinit var addToRecentEmojisUseCase: AddToRecentEmojisUseCase
 

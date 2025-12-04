@@ -5,7 +5,6 @@ import dev.alexdametto.compose_emoji_picker.domain.repository.EmojiCategoryRepos
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,7 +18,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 internal class GetEmojiCategoryByKeyUseCaseTest {
     @MockK
-    lateinit var repository: EmojiCategoryRepository
+    private lateinit var repository: EmojiCategoryRepository
 
     private lateinit var getEmojiCategoryByKeyUseCase: GetEmojiCategoryByKeyUseCase
 
