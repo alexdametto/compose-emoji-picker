@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -40,6 +42,14 @@ android {
 
     buildFeatures {
         compose = true
+    }
+}
+
+tasks.withType(Test::class.java) {
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStackTraces = true
+        exceptionFormat = TestExceptionFormat.FULL
     }
 }
 
