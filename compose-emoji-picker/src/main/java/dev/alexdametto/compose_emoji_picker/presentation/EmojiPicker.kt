@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -58,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alexdametto.compose_emoji_picker.R
 import dev.alexdametto.compose_emoji_picker.common.EmojiConstants
+import dev.alexdametto.compose_emoji_picker.common.TestTags
 import dev.alexdametto.compose_emoji_picker.di.RepositoryModule
 import dev.alexdametto.compose_emoji_picker.domain.model.Emoji
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategory
@@ -101,6 +103,7 @@ fun EmojiPicker(
             modifier = Modifier
                 .nestedScroll(rememberNestedScrollInteropConnection())
                 .systemBarsPadding()
+                .testTag(TestTags.EMOJI_PICKER)
         ) {
             EmojiPickerContent(
                 state = viewModel.state.collectAsState().value,
@@ -188,7 +191,9 @@ private fun EmojiPickerContent(
 
         if (state.emojiListItems!!.isEmpty()) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag(TestTags.EMPTY_EMOJI_PICKER),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -259,7 +264,8 @@ private fun EmojiSearchBar(
             modifier = modifier
                 .weight(5f)
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 10.dp)
+                .testTag(TestTags.SEARCH_BAR),
             value = value,
             onValueChange = onValueChange,
             decorationBox = { innerTextField ->
@@ -311,7 +317,9 @@ private fun RowScope.CategoryTabButton(
 ) {
     IconButton(
         onClick = onClick,
-        modifier = Modifier.weight(1f),
+        modifier = Modifier
+            .weight(1f)
+            .testTag(TestTags.tabButton(category)),
         enabled = enabled
     ) {
         Icon(
@@ -332,6 +340,8 @@ private fun CategoryTitle(
             fontSize = 16.sp
         ),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier
+            .testTag(TestTags.get(category))
     )
 }
 
@@ -348,7 +358,9 @@ private fun EmojiButton(
 
             // select emoji
             onEmojiSelected(emoji)
-        }
+        },
+        modifier = Modifier
+            .testTag(TestTags.get(emoji))
     ) {
         Text(
             text = emoji.emoji,
