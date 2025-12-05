@@ -43,6 +43,17 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE-notice.md"
+            excludes += "META-INF/LICENSE.md"
+        }
+
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
 }
 
 tasks.withType(Test::class.java) {
@@ -64,6 +75,7 @@ dependencies {
 
     // Tooling (previews, ...)
     implementation(libs.androidx.ui.tooling.preview.android)
+    implementation(libs.androidx.ui.test.junit4.android)
     debugImplementation(libs.androidx.ui.tooling)
 
     // Lifecycle
@@ -74,10 +86,11 @@ dependencies {
 
     // Testing
     testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
-
 publishing {
     publications {
         register<MavenPublication>("release") {
