@@ -65,6 +65,11 @@ tasks.withType(Test::class.java) {
 }
 
 dependencies {
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    testImplementation(composeBom)
+    androidTestImplementation(composeBom)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.runtime.android)
@@ -72,6 +77,7 @@ dependencies {
     // Material
     implementation(libs.material)
     implementation(libs.androidx.material3.android)
+    implementation(libs.compose.material.icons)
 
     // Tooling (previews, ...)
     implementation(libs.androidx.ui.tooling.preview.android)
