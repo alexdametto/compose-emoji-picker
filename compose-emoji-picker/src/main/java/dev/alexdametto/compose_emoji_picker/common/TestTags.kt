@@ -2,7 +2,6 @@ package dev.alexdametto.compose_emoji_picker.common
 
 import dev.alexdametto.compose_emoji_picker.domain.model.Emoji
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategory
-import dev.alexdametto.compose_emoji_picker.domain.model.EmojiListItem
 
 internal object TestTags {
     const val EMOJI_PICKER = "EMOJI_PICKER"

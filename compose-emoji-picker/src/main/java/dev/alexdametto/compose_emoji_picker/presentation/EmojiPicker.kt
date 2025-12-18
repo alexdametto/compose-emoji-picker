@@ -28,7 +28,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -71,6 +71,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun EmojiPicker(
     open: Boolean,
+    colors: EmojiPickerColors = EmojiPickerDefaults.emojiPickerColors(),
     onClose: () -> Unit,
     onEmojiSelected: (emoji: Emoji) -> Unit,
 ) {
@@ -103,11 +104,13 @@ fun EmojiPicker(
             modifier = Modifier
                 .nestedScroll(rememberNestedScrollInteropConnection())
                 .systemBarsPadding()
-                .testTag(TestTags.EMOJI_PICKER)
+                .testTag(TestTags.EMOJI_PICKER),
+            containerColor = colors.backgroundColor
         ) {
             EmojiPickerContent(
                 state = viewModel.state.collectAsState().value,
                 gridState = gridState,
+                colors = colors,
                 onCategoryTabClick = { categoryTitleIndex ->
                     coroutineScope.launch {
                         // Animate scroll to the 10th item
@@ -128,6 +131,7 @@ fun EmojiPicker(
 private fun EmojiPickerContent(
     state: EmojiPickerState,
     gridState: LazyGridState,
+    colors: EmojiPickerColors = EmojiPickerDefaults.emojiPickerColors(),
     onCategoryTabClick: (categoryTitleIndex: Int) -> Unit,
     onSearchTextChange: (searchText: String) -> Unit,
     onEmojiSelected: (emoji: Emoji) -> Unit,
@@ -140,7 +144,8 @@ private fun EmojiPickerContent(
     ) {
         EmojiSearchBar(
             value = state.searchText,
-            onValueChange = onSearchTextChange
+            onValueChange = onSearchTextChange,
+            colors = colors
         )
 
         // Calculate selected category only when firstVisibleItemIndex or categoryTitleIndexes actually change
@@ -176,6 +181,7 @@ private fun EmojiPickerContent(
                     category = category,
                     selected = isSelected,
                     enabled = isEnabled,
+                    colors = colors,
                     onClick = {
                         onCategoryTabClick(categoryTitleIndex)
                     },
@@ -202,7 +208,7 @@ private fun EmojiPickerContent(
                     style = TextStyle(
                         fontSize = 16.sp
                     ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = colors.textColor
                 )
             }
         } else {
@@ -232,7 +238,8 @@ private fun EmojiPickerContent(
                         )
                     } else if (it is EmojiCategoryTitle) {
                         CategoryTitle(
-                            category = it.category
+                            category = it.category,
+                            colors = colors
                         )
                     }
                 }
@@ -245,6 +252,7 @@ private fun EmojiPickerContent(
 private fun EmojiSearchBar(
     value: String,
     onValueChange: (value: String) -> Unit,
+    colors: EmojiPickerColors,
     modifier: Modifier = Modifier,
 ) {
     val height = 40.dp
@@ -255,7 +263,7 @@ private fun EmojiSearchBar(
             .height(height)
             .fillMaxWidth()
             .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = colors.searchBarBackgroundColor,
                 shape = cornerShape
             ),
         verticalAlignment = Alignment.CenterVertically,
@@ -278,7 +286,7 @@ private fun EmojiSearchBar(
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = colors.searchBarIconTint
                         )
                         Box(
                             modifier = Modifier.fillMaxWidth(),
@@ -290,7 +298,7 @@ private fun EmojiSearchBar(
                                         modifier = Modifier
                                             .fillMaxWidth(),
                                         text = stringResource(R.string.search),
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        color = colors.searchBarTextColor
                                     )
                                 }
                                 innerTextField()
@@ -313,6 +321,7 @@ private fun RowScope.CategoryTabButton(
     category: EmojiCategory,
     selected: Boolean,
     enabled: Boolean,
+    colors: EmojiPickerColors,
     onClick: () -> Unit,
 ) {
     IconButton(
@@ -325,21 +334,22 @@ private fun RowScope.CategoryTabButton(
         Icon(
             imageVector = ImageVector.vectorResource(category.icon),
             contentDescription = stringResource(category.title),
-            tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+            tint = if (selected) colors.activeCategoryTint else colors.inactiveCategoryTint
         )
     }
 }
 
 @Composable
 private fun CategoryTitle(
-    category: EmojiCategory
+    category: EmojiCategory,
+    colors: EmojiPickerColors
 ) {
     Text(
         text = stringResource(category.title),
         style = TextStyle(
             fontSize = 16.sp
         ),
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        color = colors.textColor,
         modifier = Modifier
             .testTag(TestTags.get(category))
     )
@@ -430,5 +440,55 @@ private fun EmojiBottomSheetContentEmptyPreview() {
             onEmojiSelected = { },
             onAddToRecent = { }
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Preview
+@Composable
+private fun EmojiBottomSheetContentCustomColors() {
+    val randomEmoji = Emoji(
+        id = "grinning_face",
+        emoji = "😀",
+        name = "grinning face",
+        slug = "grinning_face",
+        category = EmojiCategory.SMILEYS_AND_PEOPLE.key
+    )
+
+    PlaygroundTheme {
+        Scaffold {
+            EmojiPickerContent(
+                state = EmojiPickerState(
+                    emojiListItems = listOf(
+                        EmojiCategoryTitle(
+                            category = EmojiCategory.OBJECTS,
+                            id = EmojiCategory.OBJECTS.key
+                        ),
+                        EmojiItem(
+                            id = randomEmoji.id,
+                            emoji = randomEmoji
+                        )
+                    ),
+                    categoryTitleIndexes = mapOf(
+                        EmojiCategory.RECENT.key to 0
+                    )
+                ),
+                gridState = LazyGridState(),
+                colors = EmojiPickerDefaults.emojiPickerColors(
+                    backgroundColor = Color.Black,
+                    searchBarBackgroundColor = Color.Red,
+                    searchBarIconTint = Color.Green,
+                    searchBarTextColor = Color.Blue,
+                    textColor = Color.Yellow,
+                    activeCategoryTint = Color.Magenta,
+                    inactiveCategoryTint = Color.Cyan
+                ),
+                onCategoryTabClick = { },
+                onSearchTextChange = { },
+                onEmojiSelected = { },
+                onAddToRecent = { }
+            )
+        }
     }
 }

@@ -20,11 +20,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alexdametto.compose_emoji_picker.presentation.EmojiPicker
+import dev.alexdametto.compose_emoji_picker.presentation.EmojiPickerDefaults
 
 internal class SampleActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,7 +97,16 @@ private fun SampleActivityContent() {
             onEmojiSelected = {
                 selectedEmoji.value = it.emoji
                 openEmojiPicker.value = false
-            }
+            },
+            colors = EmojiPickerDefaults.emojiPickerColors(
+                backgroundColor = Color.Black,
+                searchBarBackgroundColor = Color.Red,
+                searchBarIconTint = Color.Green,
+                searchBarTextColor = Color.Blue,
+                textColor = Color.Yellow,
+                activeCategoryTint = Color.Magenta,
+                inactiveCategoryTint = Color.Cyan
+            )
         )
     }
 }
