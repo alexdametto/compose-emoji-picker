@@ -102,7 +102,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.alexdametto"
             artifactId = "compose-emoji-picker"
-            version = "1.0.0-beta3"
+            version = "1.0.0"
 
             afterEvaluate {
                 from(components["release"])
