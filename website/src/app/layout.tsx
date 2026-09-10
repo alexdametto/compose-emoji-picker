@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.scss";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, REPO_URL } from "@/lib/site";
 
 const themeInitScript = `
 try {
@@ -14,9 +15,58 @@ try {
 `;
 
 export const metadata: Metadata = {
-  title: "Compose Emoji Picker",
-  description:
-    "A Jetpack Compose emoji picker with locale-aware search, recents, and full Material 3 theming.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "Jetpack Compose",
+    "emoji picker",
+    "Android library",
+    "Kotlin",
+    "Material 3",
+    "Compose Multiplatform",
+  ],
+  authors: [{ name: "Alex Dametto", url: "https://github.com/alexdametto" }],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: SITE_NAME,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: ["/og-image.png"],
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  name: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  codeRepository: REPO_URL,
+  programmingLanguage: "Kotlin",
+  runtimePlatform: "Jetpack Compose",
+  license: "https://opensource.org/licenses/MIT",
+  author: {
+    "@type": "Person",
+    name: "Alex Dametto",
+    url: "https://github.com/alexdametto",
+  },
 };
 
 export default function RootLayout({
@@ -38,6 +88,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body>
         <ThemeToggle />
