@@ -67,6 +67,18 @@ import dev.alexdametto.compose_emoji_picker.domain.model.EmojiCategoryTitle
 import dev.alexdametto.compose_emoji_picker.domain.model.EmojiItem
 import kotlinx.coroutines.launch
 
+/**
+ * A modal bottom sheet emoji picker for Jetpack Compose, with search, recents, and
+ * category browsing across the full Unicode emoji set.
+ *
+ * Search matches the device's language when supported (currently English and Italian),
+ * falling back to English otherwise. Colors default to the current [Material3][androidx.compose.material3.MaterialTheme].
+ *
+ * @param open Whether the picker is visible.
+ * @param colors Colors used to paint the picker. Defaults to [EmojiPickerDefaults.emojiPickerColors].
+ * @param onClose Called when the picker should close (backdrop tap, system back, drag-to-dismiss).
+ * @param onEmojiSelected Called when the user taps an emoji.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmojiPicker(
