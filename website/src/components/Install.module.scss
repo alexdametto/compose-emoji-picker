@@ -1,0 +1,68 @@
+.section {
+  border-top: 1px solid var(--line);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 42ch;
+  margin-bottom: var(--space-6);
+}
+
+.heading {
+  font-size: var(--fs-xl);
+}
+
+.editor {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-sunken);
+}
+
+.tab {
+  flex: none;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  color: var(--ink-soft);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+.tabActive {
+  color: var(--ink);
+  background: var(--surface);
+  border-bottom-color: var(--accent);
+}
+
+.pre {
+  margin: 0;
+  padding: var(--space-5);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.stepLabel {
+  padding: var(--space-3) var(--space-5) 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  color: var(--ink-soft);
+}
